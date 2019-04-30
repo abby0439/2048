@@ -48,10 +48,35 @@ window.onkeydown = function (e) {
       }
     }
     print()
-  }  else if (e.code === 'ArrowLeft') {
-    // homework2
+  } else if (e.code === 'ArrowLeft') {
+    
+    for (let y = 0; y < 4; y = y + 1) {
+      let target = null
+      for (let x = 0; x < 4; x = x + 1) {
+        let n = N[y][x]
+        if (n === 0 && target === null) target = x
+        if (n > 0 && target !== null) {
+          N[y][target] = N[y][x]
+          N[y][x] = 0
+          target = target +1
+        }
+      }
+    }
+    print()    
   } else if (e.code === 'ArrowRight') {
-    // homework3
+    for (let y = 0; y < 4; y = y + 1) {
+      let target = null
+      for (let x = 3; x >=0; x = x - 1) {
+        let n = N[y][x]
+        if (n === 0 && target === null) target = x
+        if (n > 0 && target !== null) {
+          N[y][target] = N[y][x]
+          N[y][x] = 0
+          target = target -1
+        }
+      }
+    } 
+    print()
   }
 }
 
