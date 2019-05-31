@@ -285,7 +285,153 @@ function print () {
     console.log(lines.join('\n'))
 */
 }
+let meetEmpty = false
+    for (let r = begin; r !== end; r = r + step) {
+      if (N[r][c] === 0) {
+        meetEmpty = true
+      }
+      if (N[r][c] > 0 && meetEmpty) {
+        return true
+      }
+    }
 
+    for (let r = begin; r !== end - step; r = r + step) {
+      if (N[r][c] > 0 && N[r][c] === N[r + step][c]) {
+        return true
+      }
+    }
+
+  }
+
+  return false
+}
+
+function isGoableUp () {
+  return isGoableUpDown(0, 4, 1)
+}
+
+function isGoableDown () {
+  return isGoableUpDown(3, -1, -1)
+}
+
+function isGoableLeftRight (begin, end, step) {
+  for (let r = 0; r < 4; r = r + 1) {
+    let meetEmpty = false
+    for (let c = begin; c !== end; c = c + step) {
+      if (N[r][c] === 0) {
+        meetEmpty = true
+      }
+      if (N[r][c] > 0 && meetEmpty) {
+        return true
+      }
+    }
+
+    for (let c = begin; c !== end - step; c = c + step) {
+      if (N[r][c] > 0 && N[r][c] === N[r][c + step]) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+function isGoableLeft () {
+  return isGoableLeftRight(0, 4, 1)
+}
+
+function isGoableRight () {
+  return isGoableLeftRight(3, -1, -1)
+}
+// }}}
+
+// merge {{{
+function mergeUpDown (begin, end, step) {
+  for (let c = 0; c < 4; c = c + 1) {
+    for (let r = begin; r !== end; r = r + step) {
+      if (N[r][c] === N[r + step][c]) {
+        N[r][c] = N[r][c] + N[r][c]
+        N[r + step][c] = 0
+      }
+    }
+  }
+}
+
+function mergeUp () {
+  mergeUpDown(0, 3, 1)
+}
+
+function mergeDown () {
+  mergeUpDown(3, 0, -1)
+}
+
+function mergeLeftRight (begin, end, step) {
+  for (let r = 0; r < 4; r = r + 1) {
+    for (let c = begin; c !== end; c = c + step) {
+      if (N[r][c] === N[r][c + step]) {
+        N[r][c] = N[r][c] + N[r][c]
+        N[r][c + step] = 0
+      }
+    }
+  }
+}
+
+function mergeLeft () {
+  mergeLeftRight(0, 3, 1)
+}
+
+function mergeRight () {
+  mergeLeftRight(3, 0, -1)
+}
+// }}}
+
+// move {{{
+function moveUpDown (begin, end, step) {
+  for (let c = 0; c < 4; c = c + 1) {
+    let target = null
+    for (let r = begin; r !== end; r = r + step) {
+      let n = N[r][c]
+      if (n === 0 && target === null) target = r
+      if (n > 0 && target !== null) {
+        N[target][c] = N[r][c]
+        N[r][c] = 0
+        target = target + step
+      }
+    }
+  }
+}
+
+function moveUp () {
+  moveUpDown(0, 4, 1)
+}
+
+function moveDown () {
+  moveUpDown(3, -1, -1)
+}
+
+function moveLeftRight (begin, end, step) {
+  for (let r = 0; r < 4; r = r + 1) {
+    let target = null
+    for (let c = begin; c !== end; c = c + step) {
+      let n = N[r][c]
+      if (n === 0 && target === null) target = c
+      if (n > 0 && target !== null) {
+        N[r][target] = N[r][c]
+        N[r][c] = 0
+        target = target + step
+      }
+    }
+  }
+}
+
+function moveLeft () {
+  moveLeftRight(0, 4, 1)
+}
+
+function moveRight () {
+  moveLeftRight(3, -1, -1)
+}
+// }}}
 
 
 window.onkeydown = function (e) {
