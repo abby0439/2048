@@ -20,7 +20,82 @@ let N = [
     [0, 0, 0, 0], // 2  N[2][0], N[2][1], N[2][2], N[2][3]
     [0, 0, 0, 0], // 3  N[3][0], N[3][1], N[3][2], N[3][3]
 ]
+let inited = false
+function init () {
+  if (inited) {
+    return
+  }
 
+  random(true)
+  random(true)
+  print()
+  inited = true
+
+  /*
+  document.getElementById('up').onclick = function (e) { goUp() }
+  document.getElementById('down').onclick = function (e) { goDown() }
+  document.getElementById('left').onclick = function (e) { goLeft() }
+  document.getElementById('right').onclick = function (e) { goRight() }
+  */
+ registerTouchSwipe()
+ registerKeydown()
+}
+function registerTouchSwipe () {
+    let inner = document.getElementById('inner')
+    let touchsurface = document.getElementById('board')
+    let x = null
+    let y = null
+  
+    touchsurface.addEventListener('touchstart', function(e){
+      var obj = e.changedTouches[0]
+      x = obj.pageX
+      y = obj.pageY
+      e.preventDefault()
+    }, false)
+  
+    touchsurface.addEventListener('touchmove', function(e){
+      var obj = e.changedTouches[0]
+      e.preventDefault() // prevent scrolling when inside DIV
+    }, false)
+  
+    touchsurface.addEventListener('touchend', function(e){
+      let obj = e.changedTouches[0]
+      let dx = obj.pageX - x
+      let dy = obj.pageY - y
+  
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) {
+          goLeft()
+        } else if (dx > 0) {
+          goRight()
+        }
+      } else {
+        if (dy < 0) {
+          goUp()
+        } else if (dy > 0) {
+          goDown()
+        }
+      }
+      e.preventDefault()
+    }, false)
+  }
+  
+  function registerKeydown () {
+    window.onkeydown = function (e) {
+      if (!checkGameover()) {
+        if (e.code === 'ArrowUp') {
+          goUp()
+        } else if (e.code === 'ArrowDown') {
+          goDown()
+        } else if (e.code === 'ArrowLeft') {
+          goLeft()
+        } else if (e.code === 'ArrowRight') {
+          goRight()
+        }
+      }
+    }
+  }
+  
 // game initialization
 random()
 print()
