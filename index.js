@@ -20,6 +20,9 @@ let N = [
     [0, 0, 0, 0], // 2  N[2][0], N[2][1], N[2][2], N[2][3]
     [0, 0, 0, 0], // 3  N[3][0], N[3][1], N[3][2], N[3][3]
 ]
+
+window.onload = init
+
 let inited = false
 function init () {
   if (inited) {
@@ -40,8 +43,9 @@ function init () {
  registerTouchSwipe()
  registerKeydown()
 }
+
 function registerTouchSwipe () {
-    let inner = document.getElementById('inner')
+    // let inner = document.getElementById('inner')
     let touchsurface = document.getElementById('board')
     let x = null
     let y = null
@@ -96,9 +100,34 @@ function registerTouchSwipe () {
     }
   }
   
-// game initialization
-random()
-print()
+  function go (check, move, merge) {
+    if (check()) {
+      move()
+      merge()
+      move()
+      print()
+      if (!checkGameover()) {
+        random(false)
+        print()
+      }
+    }
+  }
+  
+  function goUp () {
+    go(isGoableUp, moveUp, mergeUp)
+  }
+  
+  function goDown () {
+    go(isGoableDown, moveDown, mergeDown)
+  }
+  
+  function goLeft () {
+    go(isGoableLeft, moveLeft, mergeLeft)
+  }
+  
+  function goRight () {
+    go(isGoableRight, moveRight, mergeRight)
+  }
 
 function isGoableUp () {
     for (let c = 0; c < 4; c = c + 1) {
@@ -259,16 +288,16 @@ function padNumber (n) {
 function print () {
     let cells = document.querySelectorAll('div.cell')
     for (let i = 0; i < cells.length; i = i + 1) {
-    let r = Math.floor(i / 4)
-    let c = i % 4
-    // console.log(cells[i].textContent)
-    if (N[r][c] > 0) {
-        cells[i].innerHTML = N[r][c]
-        cells[i].style.backgroundColor = colors[N[r][c]]
-    } else {
-        cells[i].innerHTML = ''
-        cells[i].style.backgroundColor = 'rgba(238, 228, 218, 0.35)'
-    }
+        let r = Math.floor(i / 4)
+        let c = i % 4
+        // console.log(cells[i].textContent)
+        if (N[r][c] > 0) {
+            cells[i].innerHTML = N[r][c]
+            cells[i].style.backgroundColor = colors[N[r][c]]
+        } else {
+            cells[i].innerHTML = ''
+            cells[i].style.backgroundColor = 'rgba(238, 228, 218, 0.35)'
+        }
     }
 
 /*
@@ -285,25 +314,27 @@ function print () {
     console.log(lines.join('\n'))
 */
 }
-let meetEmpty = false
-    for (let r = begin; r !== end; r = r + step) {
-      if (N[r][c] === 0) {
-        meetEmpty = true
-      }
-      if (N[r][c] > 0 && meetEmpty) {
-        return true
-      }
+
+//isGoable{Up,Down,Left,Right} {{{
+function isGoableUpDown (begin, end, step) {
+    for (let c = 0; c < 4; c = c + 1) {
+        let meetEmpty = false
+        for (let r = begin; r !== end; r = r + step) {
+            if (N[r][c] === 0) {
+                meetEmpty = true
+            }
+            if (N[r][c] > 0 && meetEmpty) {
+                return true
+            }
+        }
+
+        for (let r = begin; r !== end - step; r = r + step) {
+            if (N[r][c] > 0 && N[r][c] === N[r + step][c]) {
+                return true
+            }
+        }
     }
-
-    for (let r = begin; r !== end - step; r = r + step) {
-      if (N[r][c] > 0 && N[r][c] === N[r + step][c]) {
-        return true
-      }
-    }
-
-  }
-
-  return false
+    return false
 }
 
 function isGoableUp () {
@@ -434,44 +465,6 @@ function moveRight () {
 // }}}
 
 
-window.onkeydown = function (e) {
-    if (e.code === 'ArrowUp' && isGoableUp()) {
-    
-    moveUp()
-    mergeUp()
-    moveUp()
-    isGameover()
-    random()
-    print()
-
-    } if (e.code === 'ArrowDown'&& isGoableDown()) {
-    
-    moveDown()
-    mergeDown()
-    moveDown()
-    isGameover()
-    random()
-    print()
-    
-    } else if (e.code === 'ArrowLeft'&& isGoableLeft()) {
-    
-    moveLeft()
-    mergeLeft()
-    moveLeft()
-    isGameover()
-    random()
-    print()
-
-    } else if (e.code === 'ArrowRight'&& isGoableRight()) {
-    
-    moveRight()
-    mergeRight()
-    moveRight()
-    isGameover()
-    random()
-    print()
-    }
-}
 function mergeUp () {
     // 一個直排 A[0] A[1] A[2] A[3]
     // -> 四個直排
@@ -549,6 +542,19 @@ function ismergeable () {
     }
     return false
 }
+
+function checkGameover () {
+    if (isGameover()) {
+      /*
+        let modal = document.getElementById('game-over')
+      modal.style.display = 'block'
+      */
+    alert("game over!")
+      return true
+    }
+    return false
+}
+
 function isGameover () {
     // return isGoableUp() || isGoableDown() || isGoableLeft() || isGoableRight()
     return isFull() && !isMergeable()
