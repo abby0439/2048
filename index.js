@@ -298,6 +298,11 @@ function print () {
             cells[i].innerHTML = ''
             cells[i].style.backgroundColor = 'rgba(238, 228, 218, 0.35)'
         }
+        if (N[r][c] >= 8) {
+            cells[i].style.color = 'white'
+          } else {
+            cells[i].style.color = 'black'
+          }
     }
 
 /*
