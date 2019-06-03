@@ -86,9 +86,8 @@ function registerTouchSwipe () {
   
   function registerKeydown () {
     window.onkeydown = function (e) {
-      if (!checkGameover()) {
-        if (e.code === 'ArrowUp') {
-          goUp()
+      if (e.code === 'ArrowUp') {
+         goUp()
         } else if (e.code === 'ArrowDown') {
           goDown()
         } else if (e.code === 'ArrowLeft') {
