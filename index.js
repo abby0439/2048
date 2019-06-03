@@ -109,6 +109,8 @@ function registerTouchSwipe () {
       if (!checkGameover()) {
         random(false)
         print()
+        checkGameover()
+
       }
     }
   }
