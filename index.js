@@ -87,14 +87,13 @@ function registerTouchSwipe () {
   function registerKeydown () {
     window.onkeydown = function (e) {
       if (e.code === 'ArrowUp') {
-         goUp()
-        } else if (e.code === 'ArrowDown') {
-          goDown()
-        } else if (e.code === 'ArrowLeft') {
-          goLeft()
-        } else if (e.code === 'ArrowRight') {
-          goRight()
-        }
+        goUp()
+      } else if (e.code === 'ArrowDown') {
+        goDown()
+      } else if (e.code === 'ArrowLeft') {
+        goLeft()
+      } else if (e.code === 'ArrowRight') {
+        goRight()
       }
     }
   }
