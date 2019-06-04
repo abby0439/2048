@@ -530,7 +530,7 @@ function isFull(){
     }
     return true
 }
-function ismergeable () {
+function isMergeable () {
     for (let c = 0; c < 3; c = c + 1) {
     for (let r = 0; r <4 ; r = r + 1) {
         if (N[r][c] === N[r][c+1]){
@@ -550,11 +550,9 @@ function ismergeable () {
 
 function checkGameover () {
     if (isGameover()) {
-      /*
-        let modal = document.getElementById('game-over')
+      let modal = document.getElementById('game-over')
       modal.style.display = 'block'
-      */
-    alert("game over!")
+      // alert("game over!")
       return true
     }
     return false
